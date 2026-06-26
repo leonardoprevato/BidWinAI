@@ -56,16 +56,3 @@ Il ciclo di vita di ogni file è tracciato rigidamente sul database per garantir
 
 ---
 
-## Installazione e configurazione locale
-
-### Prerequisiti
-* .NET 9 SDK
-* Istanza attiva di PostgreSQL
-* Node.js (necessario per il compilatore delle classi di Tailwind CSS)
-
-### Procedura di avvio
-
-1. Clonare il repository:
-```bash
-git clone [https://github.com/tuo-username/BidWinAI.git](https://github.com/tuo-username/BidWinAI.git)
-cd BidWinAI
