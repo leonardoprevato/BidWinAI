@@ -31,6 +31,7 @@ namespace BidWinAI.Migrations
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<string>("AnalisiIA")
+                        .IsRequired()
                         .HasColumnType("text");
 
                     b.Property<DateTime>("DataCaricamento")
@@ -38,6 +39,9 @@ namespace BidWinAI.Migrations
 
                     b.Property<long>("Dimensione")
                         .HasColumnType("bigint");
+
+                    b.Property<string>("MessaggioErrore")
+                        .HasColumnType("text");
 
                     b.Property<string>("NomeFile")
                         .IsRequired()
@@ -47,7 +51,11 @@ namespace BidWinAI.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
+                    b.Property<int>("Stato")
+                        .HasColumnType("integer");
+
                     b.Property<string>("TestoEstratto")
+                        .IsRequired()
                         .HasColumnType("text");
 
                     b.Property<int>("UtenteId")

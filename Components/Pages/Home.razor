@@ -1,7 +1,90 @@
 ﻿@page "/"
 
-<PageTitle>Home</PageTitle>
+<PageTitle>BidWinAI - Dashboard</PageTitle>
 
-<h1>Hello, world!</h1>
+<div class="max-w-6xl mx-auto p-6 mt-6">
 
-Welcome to your new app.
+    <div
+        class="relative overflow-hidden rounded-2xl bg-gradient-to-br from-slate-900 via-indigo-950 to-blue-900 text-white p-8 md:p-12 shadow-lg mb-10">
+        <div class="relative z-10 max-w-2xl">
+            <span
+                class="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-blue-500/20 text-blue-300 mb-4 border border-blue-500/30 backdrop-blur-sm">
+                🚀 Piattaforma Attiva
+            </span>
+            <h1 class="text-3xl md:text-5xl font-black tracking-tight mb-4 leading-tight">
+                L'Intelligenza Artificiale al servizio dei tuoi bandi
+            </h1>
+            <p class="text-slate-300 text-base md:text-lg mb-6 leading-relaxed">
+                Ottimizza la gestione delle gare d'appalto. Carica i tuoi capitolati in PDF, monitora l'analisi del
+                motore IA in tempo reale ed estrai i requisiti chiave in pochi istanti.
+            </p>
+            <div class="flex flex-wrap gap-4">
+                <a href="carica-bando"
+                   class="inline-flex items-center gap-2 px-5 py-3 bg-blue-600 hover:bg-blue-500 text-white font-bold rounded-lg shadow-md hover:shadow-lg transition duration-200 no-underline text-sm">
+                    <span>📤</span> Carica un nuovo bando
+                </a>
+            </div>
+        </div>
+
+        <div
+            class="absolute right-0 bottom-0 top-0 w-1/3 bg-gradient-to-l from-blue-500/10 to-transparent pointer-events-none hidden md:block">
+        </div>
+    </div>
+
+    <h2 class="text-xl font-bold text-gray-800 mb-6 flex items-center gap-2">
+        <span>⚡</span> Accesso Rapido alle Funzionalità
+    </h2>
+
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+
+        <div
+            class="border border-gray-200 rounded-xl p-6 bg-white shadow-sm hover:shadow-md transition duration-200 flex flex-col justify-between group">
+            <div>
+                <div class="text-3xl mb-4 p-3 bg-blue-50 text-blue-600 rounded-lg inline-block">📤</div>
+                <h3 class="text-lg font-bold text-gray-800 mb-2 group-hover:text-blue-600 transition">Carica File PDF
+                </h3>
+                <p class="text-gray-600 text-sm mb-4 leading-relaxed">
+                    Trascina o seleziona i file dei bandi. Il sistema li salverà su disco e su PostgreSQL mettendoli in
+                    coda.
+                </p>
+            </div>
+            <a href="carica-bando"
+               class="text-sm font-semibold text-blue-600 hover:text-blue-700 transition flex items-center gap-1 no-underline mt-2">
+                Vai al caricamento <span>→</span>
+            </a>
+        </div>
+
+        <div
+            class="border border-gray-200 rounded-xl p-6 bg-white shadow-sm hover:shadow-md transition duration-200 flex flex-col justify-between group">
+            <div>
+                <div class="text-3xl mb-4 p-3 bg-amber-50 text-amber-600 rounded-lg inline-block">📌</div>
+                <h3 class="text-lg font-bold text-gray-800 mb-2 group-hover:text-amber-600 transition">Archivio Bandi
+                </h3>
+                <p class="text-gray-600 text-sm mb-4 leading-relaxed">
+                    Controlla lo stato di avanzamento dei documenti e accedi velocemente ai PDF originali salvati.
+                </p>
+            </div>
+            <a href="carica-bando"
+               class="text-sm font-semibold text-amber-600 hover:text-amber-700 transition flex items-center gap-1 no-underline mt-2">
+                Esplora i bandi <span>→</span>
+            </a>
+        </div>
+
+        <div
+            class="border border-gray-200 rounded-xl p-6 bg-white shadow-sm hover:shadow-md transition duration-200 flex flex-col justify-between group">
+            <div>
+                <div class="text-3xl mb-4 p-3 bg-cyan-50 text-cyan-600 rounded-lg inline-block">🤖</div>
+                <h3 class="text-lg font-bold text-gray-800 mb-2 group-hover:text-cyan-600 transition">Analisi IA</h3>
+                <p class="text-gray-600 text-sm mb-4 leading-relaxed">
+                    Visualizza i report generati dall'algoritmo con l'estrazione automatica di scadenze, requisiti e
+                    criticità.
+                </p>
+            </div>
+            <span
+                class="text-xs font-semibold text-emerald-700 bg-emerald-50 border border-emerald-100 px-2 py-1 rounded-md self-start mt-2 flex items-center gap-1">
+                <span class="h-1.5 w-1.5 rounded-full bg-emerald-500 animate-pulse"></span> Motore Integrato
+            </span>
+        </div>
+
+    </div>
+</div>

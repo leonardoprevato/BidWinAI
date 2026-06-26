@@ -1,5 +1,6 @@
 using BidWinAI.Components;
 using BidWinAI.Models;
+using BidWinAI.Services;
 using Microsoft.EntityFrameworkCore;
 using MudBlazor.Services;
 using OpenAI;
@@ -16,7 +17,8 @@ builder.Configuration.AddEnvironmentVariables();
 // 2. REGISTRAZIONE DEI SERVIZI (Una sola volta ciascuno!)
 builder.Services.AddRazorComponents().AddInteractiveServerComponents();
 builder.Services.AddMudServices();
-
+builder.Services.AddHostedService<BandoProcessingWorker>();
+builder.Services.AddScoped<BandoService>();
 // 3. RECUPERO DELLE VARIABILI DAL .ENV E COMPOSIZIONE STRINGA DI CONNESSIONE
 // Questo evita l'errore del '%DB_PORT%' prendendo i valori reali puliti
 var dbHost = builder.Configuration["DB_HOST"];

@@ -129,7 +129,6 @@ C:\Users\utente\Desktop\BidWinAI\obj\Debug\net10.0\scopedcss\projectbundle\BidWi
 C:\Users\utente\Desktop\BidWinAI\obj\Debug\net10.0\compressed\tzxjg6is5z-{0}-6x2ajsl5c8-6x2ajsl5c8.gz
 C:\Users\utente\Desktop\BidWinAI\obj\Debug\net10.0\compressed\0wz98yz2xy-{0}-xvsyfqkrg0-xvsyfqkrg0.gz
 C:\Users\utente\Desktop\BidWinAI\obj\Debug\net10.0\compressed\o7k4cxtn0u-{0}-k909wv51vp-k909wv51vp.gz
-C:\Users\utente\Desktop\BidWinAI\obj\Debug\net10.0\compressed\4l057eak6m-{0}-khy4lop6wu-khy4lop6wu.gz
 C:\Users\utente\Desktop\BidWinAI\obj\Debug\net10.0\compressed\rzv4yhl2k0-{0}-bqjiyaj88i-bqjiyaj88i.gz
 C:\Users\utente\Desktop\BidWinAI\obj\Debug\net10.0\compressed\aw4s3qxlfi-{0}-c2jlpeoesf-c2jlpeoesf.gz
 C:\Users\utente\Desktop\BidWinAI\obj\Debug\net10.0\compressed\nm73qg1i9j-{0}-erw9l3u2r3-erw9l3u2r3.gz
@@ -190,3 +189,8 @@ C:\Users\utente\Desktop\BidWinAI\obj\Debug\net10.0\refint\BidWinAI.dll
 C:\Users\utente\Desktop\BidWinAI\obj\Debug\net10.0\BidWinAI.pdb
 C:\Users\utente\Desktop\BidWinAI\obj\Debug\net10.0\BidWinAI.genruntimeconfig.cache
 C:\Users\utente\Desktop\BidWinAI\obj\Debug\net10.0\ref\BidWinAI.dll
+C:\Users\utente\Desktop\BidWinAI\obj\Debug\net10.0\BidWinAI.sourcelink.json
+C:\Users\utente\Desktop\BidWinAI\bin\Debug\net10.0\package-lock.json
+C:\Users\utente\Desktop\BidWinAI\bin\Debug\net10.0\package.json
+C:\Users\utente\Desktop\BidWinAI\obj\Debug\net10.0\compressed\h8b816bwtm-{0}-7and8guzmx-7and8guzmx.gz
+C:\Users\utente\Desktop\BidWinAI\obj\Debug\net10.0\compressed\4l057eak6m-{0}-mrc1mrw0i1-mrc1mrw0i1.gz

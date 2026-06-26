@@ -1,107 +1,132 @@
-using BidWinAI.Models;
 using Microsoft.AspNetCore.Components.Forms;
-using OpenAI;
+using Microsoft.EntityFrameworkCore;
+using BidWinAI.Models;
+using System.IO;
 using OpenAI.Chat;
-using UglyToad.PdfPig;
-using System.Text;
 
-namespace BidWinAI.Services;
-
-public class BandoService
+namespace BidWinAI.Services
 {
-    private readonly AppDbContext _dbContext;
-    private readonly OpenAIClient _openAiClient;
-    private readonly IWebHostEnvironment _env;
-
-    // Il framework inietterà automaticamente questi 3 oggetti configurati nel Program.cs
-    public BandoService(AppDbContext dbContext, OpenAIClient openAiClient, IWebHostEnvironment env)
+    public class BandoService
     {
-        _dbContext = dbContext;
-        _openAiClient = openAiClient;
-        _env = env;
-    }
+        private readonly AppDbContext _dbContext;
+        private readonly IWebHostEnvironment _env;
+        private readonly OpenAI.OpenAIClient _openAiClient;
 
-    public async Task ElaboraESalvaBandoAsync(IBrowserFile file)
-    {
-        long maxFileSize = 1024 * 1024 * 15; // 15 MB
-        var cartellaDestinazione = Path.Combine(_env.WebRootPath, "bandi_caricati");
-
-        if (!Directory.Exists(cartellaDestinazione))
+        public BandoService(AppDbContext dbContext, IWebHostEnvironment env, OpenAI.OpenAIClient openAiClient)
         {
-            Directory.CreateDirectory(cartellaDestinazione);
+            _dbContext = dbContext;
+            _env = env;
+            _openAiClient = openAiClient;
         }
 
-        // 1. GENERAZIONE NOME UNICO E SALVATAGGIO SU HARD DISK
-        var nomeFileUnico = $"{Guid.NewGuid()}_{file.Name}";
-        var percorsoFisicoCompleto = Path.Combine(cartellaDestinazione, nomeFileUnico);
-
-        using (var streamInput = file.OpenReadStream(maxFileSize))
-        using (var streamOutput = new FileStream(percorsoFisicoCompleto, FileMode.Create))
+        // 🟢 FASE 1: Chiamata dalla UI Blazor - Operazione istantanea
+        public async Task<int> SalvaInCodaAsync(IBrowserFile file)
         {
-            await streamInput.CopyToAsync(streamOutput);
-        }
+            long maxFileSize = 1024 * 1024 * 15; // 15 MB
+            var cartellaDestinazione = Path.Combine(_env.WebRootPath, "bandi_caricati");
 
-        var percorsoRelativo = $"bandi_caricati/{nomeFileUnico}";
-
-        // 2. ESTRAZIONE DEL TESTO DAL PDF (PdfPig)
-        string testoEstratto = EstraiTestoDaPdf(percorsoFisicoCompleto);
-
-        // 3. CHIAMATA A OPENROUTER (Tramite il client registrato nel Program.cs)
-        // Puoi cambiare il modello inserendo quello che preferisci di OpenRouter (es. "google/gemini-2.5-flash" o "openai/gpt-4o")
-        ChatClient chatClient = _openAiClient.GetChatClient("google/gemini-2.5-flash");
-
-        string prompt =
-            "Sei un assistente esperto di gare d'appalto. Analizza il testo del seguente bando ed estrai in modo schematico:\n" +
-            "1. Oggetto dell'appalto\n" +
-            "2. Importo totale stimato\n" +
-            "3. Requisiti principali\n" +
-            "4. Data di scadenza\n\n" +
-            $"Testo bando:\n{testoEstratto}";
-
-        string analisiIA = "";
-        try
-        {
-            ChatCompletion completion = await chatClient.CompleteChatAsync(prompt);
-            analisiIA = completion.Content[0].Text;
-        }
-        catch (Exception ex)
-        {
-            analisiIA = $"❌ Errore OpenRouter: {ex.Message}";
-        }
-
-        // 4. SALVATAGGIO FINALE SU POSTGRESQL TRAMITE DBCONTEXT
-        var nuovoBando = new Bando
-        {
-            NomeFile = file.Name,
-            PercorsoFile = percorsoRelativo,
-            Dimensione = file.Size,
-            DataCaricamento = DateTime.UtcNow,
-            UtenteId = 1, // Assicurati sempre che l'utente 1 esista nel DB
-            TestoEstratto = testoEstratto,
-            AnalisiIA = analisiIA
-        };
-
-        _dbContext.Bandi.Add(nuovoBando);
-        await _dbContext.SaveChangesAsync();
-    }
-
-    private string EstraiTestoDaPdf(string percorsoFile)
-    {
-        var sb = new StringBuilder();
-        try
-        {
-            using (var pdf = PdfDocument.Open(percorsoFile))
+            if (!Directory.Exists(cartellaDestinazione))
             {
-                foreach (var pagina in pdf.GetPages())
+                Directory.CreateDirectory(cartellaDestinazione);
+            }
+
+            var nomeFileUnico = $"{Guid.NewGuid()}_{file.Name}";
+            var percorsoFisicoCompleto = Path.Combine(cartellaDestinazione, nomeFileUnico);
+
+            using (var streamInput = file.OpenReadStream(maxFileSize))
+            using (var streamOutput = new FileStream(percorsoFisicoCompleto, FileMode.Create))
+            {
+                await streamInput.CopyToAsync(streamOutput);
+            }
+
+            var nuovoBando = new Bando
+            {
+                NomeFile = file.Name,
+                PercorsoFile = $"bandi_caricati/{nomeFileUnico}",
+                Dimensione = file.Size,
+                DataCaricamento = DateTime.UtcNow,
+                UtenteId = 1,
+                Stato = StatoBando.InCoda // Parte formalmente in coda
+            };
+
+            _dbContext.Bandi.Add(nuovoBando);
+            await _dbContext.SaveChangesAsync();
+
+            return nuovoBando.Id; // Restituiamo l'ID per tracciarlo
+        }
+
+        // 🟢 FASE 2: Chiamata dal Worker in Background - Elaborazione pesante
+        public async Task ElaboraBandoEffettivoAsync(int bandoId)
+        {
+            // 🔍 LOG DI INGRESSO
+            Console.WriteLine($"\n[WORKER-ASYNC] 🚀 Ricevuto bando ID {bandoId}. Inizio elaborazione in background...");
+
+            // Recuperiamo il bando (usiamo un dbContext fresco passato dal worker)
+            var bando = await _dbContext.Bandi.FindAsync(bandoId);
+            if (bando == null)
+            {
+                Console.WriteLine($"[WORKER-ASYNC] ❌ ERRORE: Impossibile trovare il bando con ID {bandoId} nel database.");
+                return;
+            }
+
+            try
+            {
+                // 1. Aggiorna lo stato in lavorazione
+                Console.WriteLine($"[WORKER-ASYNC] ⚙️ 1. Aggiornamento stato bando in 'InElaborazione' su Postgres...");
+                bando.Stato = StatoBando.InElaborazione;
+                await _dbContext.SaveChangesAsync();
+
+                var percorsoFisicoCompleto = Path.Combine(_env.WebRootPath, bando.PercorsoFile);
+                Console.WriteLine($"[WORKER-ASYNC] 📂 File da elaborare posizionato in: {percorsoFisicoCompleto}");
+
+                // 2. Estrazione testo
+                Console.WriteLine("[WORKER-ASYNC] 📄 2. Avvio estrazione testo dal PDF (PdfPig)...");
+                string testoEstratto = EstraiTestoDaPdf(percorsoFisicoCompleto);
+                bando.TestoEstratto = testoEstratto;
+                Console.WriteLine($"[WORKER-ASYNC] ✅ Estrazione completata! Caratteri estratti: {testoEstratto.Length}");
+
+                // 3. AI Crunching
+                Console.WriteLine("[WORKER-ASYNC] 🧠 3. Preparazione prompt e configurazione client OpenRouter...");
+                ChatClient chatClient = _openAiClient.GetChatClient("google/gemma-4-31b-it:free");
+
+                string prompt = "Sei un assistente esperto di gare d'appalto. Analizza il testo del seguente bando ed estrai in modo schematico:\n1. Oggetto\n2. Importo\n3. Requisiti\n4. Scadenza\n\n" + $"Testo:\n{testoEstratto}";
+                var messaggi = new ChatMessage[] { ChatMessage.CreateUserMessage(prompt) };
+
+                ChatCompletionOptions opzioni = new ChatCompletionOptions() { MaxOutputTokenCount = 2000 };
+
+                Console.WriteLine("[WORKER-ASYNC] 🌐 Invio richiesta a Gemini (OpenRouter)... ATTESA RISPOSTA DELL'IA...");
+                ChatCompletion completion = await chatClient.CompleteChatAsync(messaggi, opzioni);
+
+                bando.AnalisiIA = completion.Content[0].Text;
+                bando.Stato = StatoBando.Completato; // Ce l'abbiamo fatta!
+
+                Console.WriteLine("[WORKER-ASYNC] 🎉 Risposta ricevuta con successo! Stato bando impostato su 'Completato'.");
+            }
+            catch (Exception ex)
+            {
+                bando.Stato = StatoBando.Fallito;
+                bando.MessaggioErrore = ex.Message;
+
+                Console.WriteLine($"[WORKER-ASYNC] ❌ INTERRUZIONE PER ERRORE: {ex.Message}");
+            }
+            finally
+            {
+                Console.WriteLine("[WORKER-ASYNC] 💾 Salvataggio finale dello stato e dei testi su PostgreSQL...");
+                await _dbContext.SaveChangesAsync();
+                Console.WriteLine($"[WORKER-ASYNC] 🏁 Fine ciclo per bando ID {bandoId}.\n");
+            }
+        }
+        private string EstraiTestoDaPdf(string percorsoFile)
+        {
+            var testo = new System.Text.StringBuilder();
+            using (var document = UglyToad.PdfPig.PdfDocument.Open(percorsoFile))
+            {
+                foreach (var page in document.GetPages())
                 {
-                    sb.AppendLine(pagina.Text);
+                    testo.AppendLine(page.Text);
                 }
             }
-            return sb.ToString();
-        }
-        catch (Exception ex)
-        {
-            return $"[Errore estrazione PDF: {ex.Message}]";
+            return testo.ToString();
         }
     }
 }
