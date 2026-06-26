@@ -1,1 +1,36 @@
+# ==========================================
+# SEGRETI E CONFIGURAZIONI LOCALI
+# ==========================================
+# Non pushare mai password, chiavi API o file .env
 .env
+.env.local
+.env.*.local
+appsettings.Development.json
+# Se usi gli User Secrets nativi di .NET
+secrets.json
+
+# ==========================================
+# COMPILAZIONE E OUTPUT (.NET / C#)
+# ==========================================
+# Blocca i file che vedevamo nell'immagine {90517A05-1CAC-4E53-A13F-224537DA1543}.png
+[Bb]in/
+[Oo]bj/
+[Log]/
+
+# ==========================================
+# VISUAL STUDIO / VS CODE / IDE
+# ==========================================
+.vs/
+.vscode/
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+*.userprefs
+*.pidb
+
+# ==========================================
+# FILE DI SISTEMA (OS)
+# ==========================================
+.DS_Store
+Thumbs.db
