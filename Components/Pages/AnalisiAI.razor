@@ -1,0 +1,120 @@
+﻿@page "/analisi-bando/{BandoId:int}"
+@using BidWinAI.Models
+@using Microsoft.EntityFrameworkCore
+@inject BidWinAI.Services.BandoService BandoService
+@inject AppDbContext DbContext
+
+<div class="p-6">
+    @if (bando == null)
+    {
+        <div class="p-4 mb-4 text-sm text-red-800 rounded-lg bg-red-50 font-medium max-w-3xl mx-auto shadow-sm">
+            ⚠️ Errore: Il bando con ID <strong>@BandoId</strong> non esiste nel database!
+            Torna all'archivio dei bandi e clicca su un bando reale.
+        </div>
+    }
+    else
+    {
+        <h3 class="text-xl font-bold mb-4 text-slate-800">💬 Chat sul Bando: <span class="text-blue-600">@bando.NomeFile</span></h3>
+
+        <div class="border rounded-xl p-4 bg-white max-w-3xl shadow-sm flex flex-col gap-4 mx-auto">
+            <div class="h-96 overflow-y-auto border border-slate-200 p-3 bg-slate-50 rounded-lg flex flex-col gap-2">
+                @if (cronologiaMessaggi.Count == 0)
+                {
+                    <div class="text-center text-slate-400 my-auto italic text-sm">
+                        Nessun messaggio. Fai la tua prima domanda su questo bando!
+                    </div>
+                }
+                else
+                {
+                    @foreach (var msg in cronologiaMessaggi)
+                    {
+                        <div class="p-2.5 rounded-xl max-w-[80%] shadow-sm @(msg.IsAi ? "bg-white border border-slate-200 text-slate-800 self-start" : "bg-blue-600 text-white self-end")">
+                            <p class="text-[10px] uppercase tracking-wider font-bold opacity-60 mb-0.5">@(msg.IsAi ? "AI" : "Tu")</p>
+                            <p class="whitespace-pre-line text-sm">@msg.Testo</p>
+                        </div>
+                    }
+                }
+
+                @if (isCaricando)
+                {
+                    <div class="bg-slate-200/60 text-slate-600 text-xs p-2.5 rounded-xl self-start italic animate-pulse shadow-sm">
+                        🤖 L'IA sta analizzando il bando e rispondendo...
+                    </div>
+                }
+            </div>
+
+            <div class="flex gap-2">
+                <input @bind="inputUtente" @onkeydown="GestisciInvioConInvio" type="text" placeholder="Chiedi qualcosa sul bando..." class="flex-1 border border-slate-300 p-2.5 rounded-lg focus:outline-none focus:border-blue-500 text-sm" disabled="@isCaricando" />
+                <button @onclick="InviaDomandaAllAI" class="bg-blue-600 hover:bg-blue-700 text-white px-5 py-2.5 rounded-lg font-bold text-sm transition" disabled="@isCaricando">
+                    Invia
+                </button>
+            </div>
+        </div>
+    }
+</div>
+
+@code {
+    [Parameter] public int BandoId { get; set; }
+
+    private Bando? bando;
+    private List<MessaggiChatAi> cronologiaMessaggi = new();
+    private string inputUtente = "";
+    private bool isCaricando = false;
+
+    protected override async Task OnInitializedAsync()
+    {
+        // Recuperiamo il bando reale dal DB
+        bando = await DbContext.Bandi.FindAsync(BandoId);
+
+        if (bando != null)
+        {
+            await CaricaMessaggiDalDB();
+        }
+    }
+
+    private async Task CaricaMessaggiDalDB()
+    {
+        cronologiaMessaggi = await DbContext.MessaggiChat
+            .Where(messaggio => messaggio.BandoId == BandoId)
+            .OrderBy(messaggio => messaggio.DataCreazione)
+            .ToListAsync();
+    }
+
+    private async Task InviaDomandaAllAI()
+    {
+        if (string.IsNullOrWhiteSpace(inputUtente) || bando == null) return;
+
+        string domandaDaInviare = inputUtente;
+        inputUtente = "";
+        isCaricando = true;
+
+        // Forza la visualizzazione immediata del tuo messaggio a schermo prima di chiamare l'API
+        cronologiaMessaggi.Add(new MessaggiChatAi { BandoId = BandoId, Testo = domandaDaInviare, IsAi = false });
+        StateHasChanged();
+
+        try
+        {
+            await BandoService.RispondiInChatAsync(BandoId, bando.TestoEstratto ?? "Testo del bando vuoto.", domandaDaInviare);
+            await CaricaMessaggiDalDB();
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"❌ Errore chat: {ex.Message}");
+            // Se l'AI fallisce (es. modello null), ti scrive l'errore direttamente dentro la chat così capisci cosa c'è che non va
+            cronologiaMessaggi.Add(new MessaggiChatAi { BandoId = BandoId, Testo = $"⚠️ Errore di comunicazione con l'AI: {ex.Message}", IsAi = true });
+        }
+        finally
+        {
+            isCaricando = false;
+            StateHasChanged();
+        }
+    }
+
+    private async Task GestisciInvioConInvio(KeyboardEventArgs e)
+    {
+        if (e.Key == "Enter")
+        {
+            await InviaDomandaAllAI();
+        }
+    }
+}

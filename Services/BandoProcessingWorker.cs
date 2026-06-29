@@ -1,5 +1,5 @@
-using Microsoft.EntityFrameworkCore;
 using BidWinAI.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace BidWinAI.Services
 {
@@ -29,6 +29,7 @@ namespace BidWinAI.Services
                         var env = scope.ServiceProvider.GetRequiredService<IWebHostEnvironment>();
                         var openAiClient = scope.ServiceProvider.GetRequiredService<OpenAI.OpenAIClient>();
 
+
                         // Crea un'istanza locale di BandoService collegata a questo scope
                         var bandoService = new BandoService(dbContext, env, openAiClient);
 
@@ -46,6 +47,10 @@ namespace BidWinAI.Services
                             _logger.LogInformation($"🤖 [WORKER] Elaborazione completata per bando ID {bandoInCoda.Id}");
                         }
                     }
+                    using (var scope = _scopeFactory.CreateScope())
+                    {
+
+                    }
                 }
                 catch (Exception ex)
                 {
@@ -53,7 +58,7 @@ namespace BidWinAI.Services
                 }
 
                 // Aspetta 5 secondi prima di controllare nuovamente il database
-                await Task.Delay(5000, stoppingToken);
+                await Task.Delay(TimeSpan.FromSeconds(10), stoppingToken);
             }
         }
     }

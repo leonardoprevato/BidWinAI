@@ -34,3 +34,13 @@ secrets.json
 # ==========================================
 .DS_Store
 Thumbs.db
+
+# Escludi configurazioni locali e segreti
+appsettings.Development.json
+appsettings.Local.json
+
+# Escludi cartelle pesanti o inutili
+node_modules/
+bin/
+obj/
+.vs/

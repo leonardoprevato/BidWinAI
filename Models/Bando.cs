@@ -21,8 +21,6 @@ namespace BidWinAI.Models
 
         public string TestoEstratto { get; set; } = string.Empty;
         public string AnalisiIA { get; set; } = string.Empty;
-
-        // 🟢 NUOVE COLONNE PER L'APPROCCIO PROFESSIONALE
         public StatoBando Stato { get; set; } = StatoBando.InCoda;
         public string? MessaggioErrore { get; set; }
     }

@@ -1,10 +1,10 @@
+using System.ClientModel;
 using BidWinAI.Components;
 using BidWinAI.Models;
 using BidWinAI.Services;
 using Microsoft.EntityFrameworkCore;
 using MudBlazor.Services;
 using OpenAI;
-using System.ClientModel;
 
 // 1. CARICA IL FILE .ENV PRIMA DI TUTTO
 DotNetEnv.Env.Load();
@@ -29,8 +29,13 @@ var dbPass = builder.Configuration["DB_PASSWORD"];
 
 var connectionString = $"Host={dbHost};Port={dbPort};Database={dbDatabase};Username={dbUser};Password={dbPass}";
 
-// Registra il DbContext per PostgreSQL usando la stringa corretta
-builder.Services.AddDbContext<AppDbContext>(options => options.UseNpgsql(connectionString));
+// Registra la Factory per PostgreSQL (Risolve l'errore in Archivio.razor)
+builder.Services.AddPooledDbContextFactory<AppDbContext>(options => options.UseNpgsql(connectionString));
+
+// OPZIONALE: Se altre parti del codice (es. BandoService) richiedono 
+// AppDbContext direttamente nel costruttore, registra anche il context standard 
+// dicendogli di usare la stessa factory per generarsi.
+builder.Services.AddScoped(p => p.GetRequiredService<IDbContextFactory<AppDbContext>>().CreateDbContext());
 
 // 4. CONFIGURAZIONE SINGLETON PER OPENROUTER (La tua logica corretta)
 builder.Services.AddSingleton(sp =>

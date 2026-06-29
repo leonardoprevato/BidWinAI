@@ -1,46 +1,109 @@
-﻿<!-- Intestazione / Brand -->
-<div class="h-16 flex items-center px-6 bg-slate-950 border-b border-slate-800/60 shadow-sm">
+﻿<div class="h-16 flex items-center px-6 bg-slate-950 border-b border-slate-800/60 shadow-sm">
     <a class="text-xl font-black tracking-wider text-white no-underline flex items-center gap-2" href="">
-        <span class="text-blue-500 font-bold">⚡</span> BidWinAI
+        <svg class="w-6 h-6 text-blue-500" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M13 10V3L4 14H11V21L20 10H13Z" />
+        </svg>
+        <span>BidWin<span class="text-blue-500">AI</span></span>
     </a>
 </div>
 
-<!-- Input per il Menu Mobile -->
 <input type="checkbox" title="Navigation menu" class="navbar-toggler hidden" id="nav-toggle" />
 
-<!-- Contenitore Navigazione Laterale -->
 <div class="nav-scrollable flex flex-col bg-slate-900 text-slate-300 min-h-[calc(100vh-4rem)] pt-4">
     <nav class="flex flex-col gap-1.5 px-3">
 
-        <!-- Link: Home -->
+        <div class="px-4 pt-2 pb-1 text-[11px] font-bold text-slate-500 uppercase tracking-widest">Generale</div>
+
         <div class="w-full">
-            <NavLink
-                class="flex items-center gap-3.5 px-4 py-3 text-slate-400 hover:text-white hover:bg-slate-800/50 rounded-xl transition-all duration-200 font-medium no-underline text-sm group [&.active]:bg-slate-800/70 [&.active]:text-white [&.active]:font-semibold"
-                href="" Match="NavLinkMatch.All">
-                <span class="text-lg group-hover:scale-110 transition duration-150">🏠</span>
+            <NavLink class="flex items-center gap-3.5 px-4 py-2.5 text-slate-400 hover:text-white hover:bg-slate-800/50 rounded-xl transition-all duration-200 font-medium no-underline text-sm group [&.active]:bg-slate-800/70 [&.active]:text-white [&.active]:font-semibold"
+                     href="" Match="NavLinkMatch.All">
+                <svg class="w-5 h-5 group-hover:scale-110 transition duration-150" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
+                    <polyline points="9 22 9 12 15 12 15 22" />
+                </svg>
                 <span>Home</span>
             </NavLink>
         </div>
 
-        <!-- Link: Carica Bando -->
         <div class="w-full">
-            <NavLink
-                class="flex items-center gap-3.5 px-4 py-3 text-slate-400 hover:text-white hover:bg-slate-800/50 rounded-xl transition-all duration-200 font-medium no-underline text-sm group [&.active]:bg-slate-800/70 [&.active]:text-white [&.active]:font-semibold"
-                href="carica-bando">
-                <span class="text-lg group-hover:scale-110 transition duration-150">📤</span>
+            <NavLink class="flex items-center gap-3.5 px-4 py-2.5 text-slate-400 hover:text-white hover:bg-slate-800/50 rounded-xl transition-all duration-200 font-medium no-underline text-sm group [&.active]:bg-slate-800/70 [&.active]:text-white [&.active]:font-semibold"
+                     href="carica-bando">
+                <svg class="w-5 h-5 group-hover:scale-110 transition duration-150" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+                    <polyline points="17 8 12 3 7 8" />
+                    <line x1="12" y1="3" x2="12" y2="15" />
+                </svg>
                 <span>Carica Bando</span>
             </NavLink>
         </div>
 
-        <!-- Link: Archivio Bandi -->
         <div class="w-full">
-            <NavLink
-                class="flex items-center gap-3.5 px-4 py-3 text-slate-400 hover:text-white hover:bg-slate-800/50 rounded-xl transition-all duration-200 font-medium no-underline text-sm group [&.active]:bg-slate-800/70 [&.active]:text-white [&.active]:font-semibold"
-                href="archivio">
-                <span class="text-lg group-hover:scale-110 transition duration-150">📌</span>
+            <NavLink class="flex items-center gap-3.5 px-4 py-2.5 text-slate-400 hover:text-white hover:bg-slate-800/50 rounded-xl transition-all duration-200 font-medium no-underline text-sm group [&.active]:bg-slate-800/70 [&.active]:text-white [&.active]:font-semibold"
+                     href="archivio-bandi">
+                <svg class="w-5 h-5 group-hover:scale-110 transition duration-150" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+                    <polyline points="14 2 14 8 20 8" />
+                    <line x1="16" y1="13" x2="8" y2="13" />
+                    <line x1="16" y1="17" x2="8" y2="17" />
+                    <polyline points="10 9 9 9 8 9" />
+                </svg>
                 <span>Archivio Bandi</span>
             </NavLink>
         </div>
+@* 
+        <div class="px-4 pt-4 pb-1 text-[11px] font-bold text-slate-500 uppercase tracking-widest">Strumenti IA</div>
+ *@
+        @* <div class="w-full">
+            <NavLink class="flex items-center gap-3.5 px-4 py-2.5 text-slate-400 hover:text-white hover:bg-slate-800/50 rounded-xl transition-all duration-200 font-medium no-underline text-sm group [&.active]:bg-slate-800/70 [&.active]:text-white [&.active]:font-semibold"
+                     href="generatore-offerta">
+                <svg class="w-5 h-5 group-hover:scale-110 transition duration-150" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M12 2a10 10 0 0 1 7.54 16.59c-.44.47-.64 1.12-.54 1.76l.24 1.48a1 1 0 0 1-1.32 1.12l-1.42-.48a1.94 1.94 0 0 0-1.26.04A10 10 0 1 1 12 2z" />
+                    <path d="M8 11h8" />
+                    <path d="M8 15h6" />
+                    <path d="M9 7h1" />
+                </svg>
+                <span>Generatore Offerta</span>
+            </NavLink>
+        </div>
+
+        <div class="px-4 pt-4 pb-1 text-[11px] font-bold text-slate-500 uppercase tracking-widest">Scadenze & Controllo</div>
+
+        <div class="w-full">
+            <NavLink class="flex items-center gap-3.5 px-4 py-2.5 text-slate-400 hover:text-white hover:bg-slate-800/50 rounded-xl transition-all duration-200 font-medium no-underline text-sm group [&.active]:bg-slate-800/70 [&.active]:text-white [&.active]:font-semibold"
+                     href="scadenziario">
+                <svg class="w-5 h-5 group-hover:scale-110 transition duration-150" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <rect x="3" y="4" width="18" height="18" rx="2" ry="2" />
+                    <line x1="16" y1="2" x2="16" y2="6" />
+                    <line x1="8" y1="2" x2="8" y2="6" />
+                    <line x1="3" y1="10" x2="21" y2="10" />
+                </svg>
+                <span>Scadenziario</span>
+            </NavLink>
+        </div>
+
+        <div class="w-full">
+            <NavLink class="flex items-center gap-3.5 px-4 py-2.5 text-slate-400 hover:text-white hover:bg-slate-800/50 rounded-xl transition-all duration-200 font-medium no-underline text-sm group [&.active]:bg-slate-800/70 [&.active]:text-white [&.active]:font-semibold"
+                     href="checklist-conformita">
+                <svg class="w-5 h-5 group-hover:scale-110 transition duration-150" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="9 11 12 14 22 4" />
+                    <path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11" />
+                </svg>
+                <span>Checklist Conformità</span>
+            </NavLink>
+        </div>
+
+        <div class="px-4 pt-4 pb-1 text-[11px] font-bold text-slate-500 uppercase tracking-widest">Configurazione</div>
+
+        <div class="w-full">
+            <NavLink class="flex items-center gap-3.5 px-4 py-2.5 text-slate-400 hover:text-white hover:bg-slate-800/50 rounded-xl transition-all duration-200 font-medium no-underline text-sm group [&.active]:bg-slate-800/70 [&.active]:text-white [&.active]:font-semibold"
+                     href="profilo-aziendale">
+                <svg class="w-5 h-5 group-hover:scale-110 transition duration-150" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="12" cy="12" r="3" />
+                    <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z" />
+                </svg>
+                <span>Profilo Aziendale</span>
+            </NavLink>
+        </div> *@
 
     </nav>
 </div>

@@ -22,7 +22,7 @@
     <PackageReference Include="OpenAI" Version="2.11.0" />
     <PackageReference Include="PdfPig" Version="0.1.14" />
 
-    <Watch Remove="wwwroot\bandi_caricati\**\*" Watch="false"/>
+    <Watch Remove="wwwroot\bandi_caricati\**\*" Watch="false" />
   </ItemGroup>
   <Target Name="CompileTailwind" BeforeTargets="Build;Compile">
     <Message Importance="high" Text="🎨 Compilazione e ottimizzazione di Tailwind CSS in corso..." />

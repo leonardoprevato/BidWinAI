@@ -9,14 +9,14 @@
 @inject BandoService BandoService
 @inject AppDbContext DbContext
 
-<div class="max-w-6xl mx-auto p-6 bg-white rounded-xl shadow-sm mt-6">
+<div class="mx-auto p-6 bg-white rounded-xl shadow-sm mt-6">
     <h3 class="text-2xl font-bold text-gray-800 mb-2">Carica Nuovo Bando</h3>
     <p class="text-gray-600 mb-6">I file caricati verranno accumulati nella lista sottostante.</p>
 
     <div
         class="relative border-3 border-dashed border-blue-500 hover:border-blue-600 bg-blue-50/50 hover:bg-blue-50 p-10 text-center rounded-xl cursor-pointer transition duration-200 group">
         <p class="text-gray-700 font-medium group-hover:text-blue-700 transition">
-            📄 Trascina qui il file PDF del bando o <span class="text-blue-600 underline">clicca per cercarlo</span>
+            Trascina qui il file PDF del bando o <span class="text-blue-600 underline">clicca per cercarlo</span>
         </p>
         <InputFile OnChange="GestisciFileCaricato" accept=".pdf" multiple
                    class="absolute inset-0 w-full h-full opacity-0 cursor-pointer" />
@@ -30,7 +30,7 @@
             @foreach (var file in listaFiles)
             {
                 <div class="flex items-center p-4 bg-green-50 border border-green-200 text-green-900 rounded-lg shadow-sm">
-                    <span class="text-2xl mr-4">📄</span>
+                    <span class="text-2xl mr-4"></span>
                     <div class="flex flex-col">
                         <strong class="font-semibold break-all">@file.Name</strong>
                         <span class="text-sm text-gray-500">(@(file.Size / 1024) KB)</span>
@@ -42,7 +42,10 @@
         <button
             class="mt-5 px-6 py-3 bg-green-600 hover:bg-green-700 text-white font-bold rounded-lg shadow-md hover:shadow-lg transition duration-200 flex items-center gap-2"
             @onclick="SalvaBandiSuPostgres">
-            <span>💾</span> Salva nel Database e sul Disco
+            <span><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-floppy" viewBox="0 0 16 16">
+  <path d="M11 2H9v3h2z"/>
+  <path d="M1.5 0h11.586a1.5 1.5 0 0 1 1.06.44l1.415 1.414A1.5 1.5 0 0 1 16 2.914V14.5a1.5 1.5 0 0 1-1.5 1.5h-13A1.5 1.5 0 0 1 0 14.5v-13A1.5 1.5 0 0 1 1.5 0M1 1.5v13a.5.5 0 0 0 .5.5H2v-4.5A1.5 1.5 0 0 1 3.5 9h9a1.5 1.5 0 0 1 1.5 1.5V15h.5a.5.5 0 0 0 .5-.5V2.914a.5.5 0 0 0-.146-.353l-1.415-1.415A.5.5 0 0 0 13.086 1H13v4.5A1.5 1.5 0 0 1 11.5 7h-7A1.5 1.5 0 0 1 3 5.5V1H1.5a.5.5 0 0 0-.5.5m3 4a.5.5 0 0 0 .5.5h7a.5.5 0 0 0 .5-.5V1H4zM3 15h10v-4.5a.5.5 0 0 0-.5-.5h-9a.5.5 0 0 0-.5.5z"/>
+</svg></span> Salva 
         </button>
     }
 
@@ -58,7 +61,11 @@
     <hr class="my-10 border-t-2 border-gray-100" />
 
     <h3 class="text-2xl font-bold text-gray-800 mb-4 flex items-center gap-2">
-        <span>📌</span> Archivio Bandi nel Database
+        <span>
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pin-angle" viewBox="0 0 16 16">
+                <path d="M9.828.722a.5.5 0 0 1 .354.146l4.95 4.95a.5.5 0 0 1 0 .707c-.48.48-1.072.588-1.503.588-.177 0-.335-.018-.46-.039l-3.134 3.134a6 6 0 0 1 .16 1.013c.046.702-.032 1.687-.72 2.375a.5.5 0 0 1-.707 0l-2.829-2.828-3.182 3.182c-.195.195-1.219.902-1.414.707s.512-1.22.707-1.414l3.182-3.182-2.828-2.829a.5.5 0 0 1 0-.707c.688-.688 1.673-.767 2.375-.72a6 6 0 0 1 1.013.16l3.134-3.133a3 3 0 0 1-.04-.461c0-.43.108-1.022.589-1.503a.5.5 0 0 1 .353-.146m.122 2.112v-.002zm0-.002v.002a.5.5 0 0 1-.122.51L6.293 6.878a.5.5 0 0 1-.511.12H5.78l-.014-.004a5 5 0 0 0-.288-.076 5 5 0 0 0-.765-.116c-.422-.028-.836.008-1.175.15l5.51 5.509c.141-.34.177-.753.149-1.175a5 5 0 0 0-.192-1.054l-.004-.013v-.001a.5.5 0 0 1 .12-.512l3.536-3.535a.5.5 0 0 1 .532-.115l.096.022c.087.017.208.034.344.034q.172.002.343-.04L9.927 2.028q-.042.172-.04.343a1.8 1.8 0 0 0 .062.46z" />
+            </svg>
+        </span> Storico caricamenti
     </h3>
 
     @if (bandiSalvati == null)
@@ -127,13 +134,18 @@
                                             <td class="px-6 py-4 whitespace-nowrap text-sm font-medium flex gap-2">
                                                 <a href="@bando.PercorsoFile" target="_blank"
                                                    class="inline-flex items-center px-3 py-1.5 bg-blue-600 hover:bg-blue-700 text-white rounded-md transition duration-150 no-underline shadow-sm text-xs font-semibold">
-                                                    👁️ PDF
+                                                   <span class="">
+                                                       <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-eye" viewBox="0 0 16 16"> <path d="M16 8s-3-5.5-8-5.5S0 8 0 8s3 5.5 8 5.5S16 8 16 8M1.173 8a13 13 0 0 1 1.66-2.043C4.12 4.668 5.88 3.5 8 3.5s3.879 1.168 5.168 2.457A13 13 0 0 1 14.828 8q-.086.13-.195.288c-.335.48-.83 1.12-1.465 1.755C11.879 11.332 10.119 12.5 8 12.5s-3.879-1.168-5.168-2.457A13 13 0 0 1 1.172 8z"/><path d="M8 5.5a2.5 2.5 0 1 0 0 5 2.5 2.5 0 0 0 0-5M4.5 8a3.5 3.5 0 1 1 7 0 3.5 3.5 0 0 1-7 0"/> </svg>
+                                                   </span> PDF
                                                 </a>
 
                                                 <button
                                                     class="inline-flex items-center px-3 py-1.5 bg-cyan-600 hover:bg-cyan-700 disabled:opacity-40 disabled:hover:bg-cyan-600 text-white rounded-md transition duration-150 shadow-sm text-xs font-semibold disabled:cursor-not-allowed"
                                                     disabled="@(bando.Stato != StatoBando.Completato)" @onclick="() => SelezionaBando(bando)">
-                                                    🤖 Risposta IA
+                                                    <span><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-robot" viewBox="0 0 16 16">
+  <path d="M6 12.5a.5.5 0 0 1 .5-.5h3a.5.5 0 0 1 0 1h-3a.5.5 0 0 1-.5-.5M3 8.062C3 6.76 4.235 5.765 5.53 5.886a26.6 26.6 0 0 0 4.94 0C11.765 5.765 13 6.76 13 8.062v1.157a.93.93 0 0 1-.765.935c-.845.147-2.34.346-4.235.346s-3.39-.2-4.235-.346A.93.93 0 0 1 3 9.219zm4.542-.827a.25.25 0 0 0-.217.068l-.92.9a25 25 0 0 1-1.871-.183.25.25 0 0 0-.068.495c.55.076 1.232.149 2.02.193a.25.25 0 0 0 .189-.071l.754-.736.847 1.71a.25.25 0 0 0 .404.062l.932-.97a25 25 0 0 0 1.922-.188.25.25 0 0 0-.068-.495c-.538.074-1.207.145-1.98.189a.25.25 0 0 0-.166.076l-.754.785-.842-1.7a.25.25 0 0 0-.182-.135"/>
+  <path d="M8.5 1.866a1 1 0 1 0-1 0V3h-2A4.5 4.5 0 0 0 1 7.5V8a1 1 0 0 0-1 1v2a1 1 0 0 0 1 1v1a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-1a1 1 0 0 0 1-1V9a1 1 0 0 0-1-1v-.5A4.5 4.5 0 0 0 10.5 3h-2zM14 7.5V13a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V7.5A3.5 3.5 0 0 1 5.5 4h5A3.5 3.5 0 0 1 14 7.5"/>
+</svg></span> Risposta IA
                                                 </button>
                                             </td>
                                         </tr>
