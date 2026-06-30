@@ -49,7 +49,7 @@ Il ciclo di vita di ogni file è tracciato rigidamente sul database per garantir
 
 | Stato | Descrizione |
 | :--- | :--- |
-| **InCoda** | Il file è stato caricato ed è memorizzato sul server, in attesa di essere prelevato dal servizio in background. |
+| **InCoda** | Il file è stato caricato ed è in attesa di essere prelevato dal servizio in background. |
 | **InElaborazione** | Il worker ha preso in carico il file, sta eseguendo il parsing del testo e attende la risposta dall'intelligenza artificiale. |
 | **Completato** | L'analisi è terminata con successo. I dati estratti e la sintesi sono pronti sul database per essere consultati. |
 | **Fallito** | Si è verificato un errore critico (timeout, file corrotto o credenziali API non valide). |
